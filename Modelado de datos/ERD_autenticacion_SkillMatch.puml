@@ -1,0 +1,68 @@
+@startuml
+hide circle
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "USUARIOS" as usuarios {
+    * id_usuario : INT <<PK>>
+    --
+    nombres : VARCHAR(100)
+    apellidos : VARCHAR(100)
+    documento_identidad : VARCHAR(20)
+    telefono : VARCHAR(20)
+    correo_electronico : VARCHAR(100)
+    foto_perfil : VARCHAR(255)
+}
+
+entity "ACCESO" as acceso {
+    * id_acceso : INT <<PK>>
+    --
+    id_usuario : INT <<FK>>
+    correo_login : VARCHAR(100)
+    contraseña_hash : VARCHAR(255)
+    estado_cuenta : ENUM
+    fecha_ultimo_acceso : DATETIME
+}
+
+entity "ROLES" as roles {
+    * id_rol : INT <<PK>>
+    --
+    nombre_rol : set(aprendiz, empresa, administrador, funcionario_sena, ape)
+    descripcion_permisos : TEXT
+}
+
+entity "USUARIO_ROL" as usuarioRol {
+    * id_usuario_rol : INT <<PK>>
+    --
+    id_usuario : INT <<FK>>
+    id_rol : INT <<FK>>
+}
+
+entity "RECUPERACION" as recuperacion {
+    * id_recuperacion : INT <<PK>>
+    --
+    id_acceso : INT <<FK>>
+    token_seguridad : VARCHAR(255)
+    fecha_solicitud : DATETIME
+    fecha_expiracion : DATETIME
+}
+
+entity "AUDITORIA" as auditoria {
+    * id_auditoria : INT <<PK>>
+    --
+    id_usuario : INT <<FK>>
+    fecha_creacion_cuenta : DATETIME
+    fecha_ultima_modificacion : DATETIME
+}
+
+'=========================
+' Relaciones
+'=========================
+
+usuarios ||--|| acceso : posee
+usuarios ||--|| auditoria : registra
+acceso ||--o{ recuperacion : genera
+usuarios ||--o{ usuarioRol : tiene
+roles ||--o{ usuarioRol : asigna
+
+@enduml

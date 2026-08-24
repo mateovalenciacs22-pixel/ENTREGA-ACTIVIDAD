@@ -1,0 +1,98 @@
+@startuml
+hide circle
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+'=========================
+' MÓDULO AUTENTICACIÓN
+'=========================
+
+entity "USUARIOS" as usuarios {
+    * id_usuario : PK
+}
+
+entity "ACCESO" as acceso {
+    * id_acceso : PK
+}
+
+entity "ROLES" as roles {
+    * id_rol : PK
+}
+
+entity "USUARIO_ROL" as usuarioRol {
+    * id_usuario : FK
+    * id_rol : FK
+}
+
+entity "RECUPERACION" as recuperacion {
+    * id_recuperacion : PK
+}
+
+entity "AUDITORIA" as auditoria {
+    * id_auditoria : PK
+}
+
+'=========================
+' MÓDULO APRENDICES
+'=========================
+
+entity "APRENDICES" as aprendices {
+    * id_aprendiz : PK
+}
+
+entity "EXPERIENCIA_LABORAL" as experiencia {
+    * id_experiencia : PK
+}
+
+entity "INFORMACION_ACADEMICA" as academica {
+    * id_academico : PK
+}
+
+entity "HABILIDADES" as habilidades {
+    * id_habilidad : PK
+}
+
+entity "CERTIFICACIONES" as certificaciones {
+    * id_certificacion : PK
+}
+
+'=========================
+' MÓDULO EMPRESARIAL
+'=========================
+
+entity "EMPRESAS" as empresas {
+    * id_empresa : PK
+}
+
+entity "VACANTES" as vacantes {
+    * id_vacante : PK
+}
+
+entity "POSTULACIONES" as postulaciones {
+    * id_postulacion : PK
+}
+
+'=====================================================
+' RELACIONES
+'=====================================================
+
+usuarios ||--|| acceso
+usuarios ||--|| auditoria
+acceso ||--o{ recuperacion
+
+usuarios ||--o{ usuarioRol
+roles ||--o{ usuarioRol
+
+usuarios ||--|| aprendices
+usuarios ||--|| empresas
+
+aprendices ||--o{ experiencia
+aprendices ||--o{ academica
+aprendices ||--o{ habilidades
+aprendices ||--o{ certificaciones
+
+empresas ||--o{ vacantes
+aprendices ||--o{ postulaciones
+vacantes ||--o{ postulaciones
+
+@enduml
